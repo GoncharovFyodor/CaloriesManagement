@@ -34,7 +34,7 @@
 <h3><a href="index.html">Home</a></h3>
 <h2>Meals</h2>
 <c:if test="${empty mealWithExceedList}">
-    There no Meals
+    There no meals
 </c:if>
 <c:if test="${not empty mealWithExceedList}">
     <table>
