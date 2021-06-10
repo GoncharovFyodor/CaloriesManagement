@@ -21,14 +21,13 @@ import java.util.List;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
-    private static final Logger log = getLogger(MealServlet.class);
+    private static final Logger logger = getLogger(MealServlet.class);
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private static final int CALORIES_PER_DAY = 2000;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //log.debug("redirect to meals");
-        log.debug("forward to meals");
+        logger.debug("forward to meals");
 
         MealDAO mealDB = new MealDAOListImpl();
         List<MealWithExceed> mealWithExceedList =
