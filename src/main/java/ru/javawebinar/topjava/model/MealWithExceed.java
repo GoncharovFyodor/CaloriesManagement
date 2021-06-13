@@ -32,6 +32,10 @@ public class MealWithExceed {
         return description;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
     public int getCalories() {
         return calories;
     }
@@ -47,7 +51,7 @@ public class MealWithExceed {
 
     @Override
     public String toString() {
-        return "UserMealWithExcess{" +
+        return "MealWithExceed{" +
                 "dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
