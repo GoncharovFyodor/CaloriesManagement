@@ -33,12 +33,12 @@
 <body>
 <h3><a href="index.html">Home</a></h3>
 <h2>Meals</h2>
-<c:if test="${empty mealWithExceedList}">
+<c:if test="${empty mealToList}">
     There no meals
 </c:if>
-<c:if test="${not empty mealWithExceedList}">
+<c:if test="${not empty mealToList}">
     <table>
-        <c:forEach var="meal" items="${mealWithExceedList}">
+        <c:forEach var="meal" items="${mealToList}">
             <c:if test="${meal.exceed == true}">
                 <tr style="color: red">
             </c:if>
