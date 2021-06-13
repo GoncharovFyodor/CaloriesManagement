@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import ru.javawebinar.topjava.dao.MealDAO;
 import ru.javawebinar.topjava.dao.MealDAOImplCHMap;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.MealWithExceed;
+import ru.javawebinar.topjava.model.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
@@ -41,10 +41,10 @@ public class MealServlet extends HttpServlet {
             req.getRequestDispatcher("/mealForm.jsp").forward(req, resp);
         }
 
-        List<MealWithExceed> mealWithExceedList =
+        List<MealTo> mealToList =
                 MealsUtil.filteredByCycles(mealsDB.getAll(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY);
 
-        req.setAttribute("mealWithExceedList", mealWithExceedList);
+        req.setAttribute("mealWithExceedList", mealToList);
         req.setAttribute("formatDate", dateTimeFormatter);
         req.getRequestDispatcher("/meals.jsp").forward(req, resp);
     }
