@@ -37,7 +37,7 @@ public class MealsUtil {
         }
         List<MealTo> result = new ArrayList<>();
         for (Meal meal : meals) {
-            if (TimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime)) {
+            if (DateTimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime)) {
                 result.add(new MealTo(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(),
                         caloriesByDay.get(meal.getDateTime().toLocalDate()) > caloriesPerDay));
             }
