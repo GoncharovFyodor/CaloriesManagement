@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.repository.inmemory;
 
 import javafx.collections.transformation.SortedList;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.model.Meal;
@@ -11,6 +12,8 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.util.DateTimeUtil.isBetween;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.Collection;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -51,6 +54,16 @@ public class InMemoryMealRepository implements MealRepository {
 
     private Meal save(Meal meal) {
         return this.save(meal, 1);
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        log.info("+++ PostConstruct");
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        log.info("+++ PreDestroy");
     }
 
     @Override
