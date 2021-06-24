@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.repository;
 
 import ru.javawebinar.topjava.model.Meal;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.List;
@@ -18,5 +19,5 @@ public interface MealRepository {
     // null if not found
     Collection<Meal> getAll(int userId);
 
-    Collection<Meal> getFilteredByTime(LocalTime startTime, LocalTime endTime, int userId);
+    List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId);
 }
