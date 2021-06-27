@@ -27,17 +27,20 @@ public class MealsUtil {
         //List<UserMealWithExcess> mealsTo = filteredByCycles(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
         //mealsTo.forEach(System.out::println);
 
-        System.out.println(filteredByStreams(MEALS, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
+        System.out.println(filteredByStreams(MEALS,
+                LocalDateTime.of(LocalDate.of(2021,5,1),LocalTime.of(7,0)),
+                LocalDateTime.of(LocalDate.of(2021,5,1),LocalTime.of(12, 0)),
+                2000));
     }
 
-    public static List<MealTo> filteredByCycles(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    public static List<MealTo> filteredByCycles(List<Meal> meals, LocalDateTime startTime, LocalDateTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> caloriesByDay = new HashMap<>();
         for (Meal meal : meals) {
             caloriesByDay.merge(meal.getDateTime().toLocalDate(), meal.getCalories(), Integer::sum);
         }
         List<MealTo> result = new ArrayList<>();
         for (Meal meal : meals) {
-            if (DateTimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime)) {
+            if (DateTimeUtil.isBetween(meal.getDateTime(), startTime, endTime)) {
                 result.add(new MealTo(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(),
                         caloriesByDay.get(meal.getDateTime().toLocalDate()) > caloriesPerDay));
             }
@@ -45,21 +48,21 @@ public class MealsUtil {
         return result;
     }
 
-    public static List<MealTo> filteredByStreams(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    public static List<MealTo> filteredByStreams(List<Meal> meals, LocalDateTime startTime, LocalDateTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> caloriesByDay = meals.stream()
                 .collect(Collectors.toMap(meal -> meal.getDateTime().toLocalDate(),
                         Meal::getCalories,
                         Integer::sum
                 ));
         return meals.stream()
-                .filter(meal -> DateTimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime))
+                .filter(meal -> DateTimeUtil.isBetween(meal.getDateTime(), startTime, endTime))
                 .map(meal -> new MealTo(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(),
                         caloriesByDay.get(meal.getDateTime().toLocalDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
     }
 
     public static List<MealTo> createTo(List<Meal> meals, int caloriesPerDay) {
-        return filteredByCycles(meals, LocalTime.MIN, LocalTime.MAX, caloriesPerDay);
+        return filteredByCycles(meals, LocalDateTime.MIN, LocalDateTime.MAX, caloriesPerDay);
     }
 
     public static MealTo createTo(Meal meal, boolean exceeded) {

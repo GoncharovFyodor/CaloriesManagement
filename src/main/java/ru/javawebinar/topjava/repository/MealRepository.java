@@ -19,5 +19,5 @@ public interface MealRepository {
     // null if not found
     Collection<Meal> getAll(int userId);
 
-    List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId);
+    List<Meal> getBetween(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId);
 }

@@ -46,7 +46,7 @@ public class MealRestController {
 
     public List<MealTo> getFilteredByTime(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
         return filteredByCycles(service.getAll(SecurityUtil.authUserId()),
-                LocalDateTime.of(startDate, startTime).toLocalTime(),
-                LocalDateTime.of(endDate, endTime).toLocalTime(), DEFAULT_CALORIES_PER_DAY);
+                LocalDateTime.of(startDate, startTime),
+                LocalDateTime.of(endDate, endTime), DEFAULT_CALORIES_PER_DAY);
     }
 }

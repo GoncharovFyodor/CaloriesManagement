@@ -6,7 +6,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class MealService {
         return (List<Meal>) repository.getAll(userId);
     }
 
-    public Collection<Meal> getFilteredByTime(LocalTime startTime, LocalTime endTime, int userId) {
-        return repository.getFilteredByTime(startTime, endTime, userId);
+    public Collection<Meal> getBetween(LocalDateTime startTime, LocalDateTime endTime, int userId) {
+        return repository.getBetween(startTime, endTime, userId);
     }
 }
