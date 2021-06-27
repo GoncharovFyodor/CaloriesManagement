@@ -11,9 +11,8 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
+import javax.sql.DataSource;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Collection;
 import java.util.List;
 
 @Repository

@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
@@ -15,38 +17,63 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.MealsUtil.*;
+import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
+import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 
 @Controller
 public class MealRestController {
+    private static final Logger log = LoggerFactory.getLogger(MealRestController.class);
+
+    private final MealService service;
 
     @Autowired
-    private MealService service;
-
-    public Meal save(Meal meal) throws NotFoundException {
-        return service.save(meal, SecurityUtil.authUserId());
+    public MealRestController(MealService service) {
+        this.service = service;
     }
 
-    public void delete(int id) throws NotFoundException {
-        service.delete(id, SecurityUtil.authUserId());
+    public Meal get(int id) {
+        int userId = SecurityUtil.authUserId();
+        log.info("get meal {} for user {}", id, userId);
+        return service.get(id, userId);
     }
 
-    public MealTo get(int id) throws NotFoundException {
-        Meal meal = service.get(id, SecurityUtil.authUserId());
-
-        return MealsUtil.createTo(service.getAll(SecurityUtil.authUserId()), meal);
-    }
-
-    public void update(Meal meal) throws NotFoundException {
-        service.update(meal, SecurityUtil.authUserId());
+    public void delete(int id) {
+        int userId = SecurityUtil.authUserId();
+        log.info("delete meal {} for user {}", id, userId);
+        service.delete(id, userId);
     }
 
     public List<MealTo> getAll() {
-        return createTo(service.getAll(SecurityUtil.authUserId()), DEFAULT_CALORIES_PER_DAY);
+        int userId = SecurityUtil.authUserId();
+        log.info("getAll for user {}", userId);
+        return MealsUtil.getWithExcess(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay());
     }
 
-    public List<MealTo> getFilteredByTime(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
-        return filteredByCycles(service.getAll(SecurityUtil.authUserId()),
-                LocalDateTime.of(startDate, startTime),
-                LocalDateTime.of(endDate, endTime), DEFAULT_CALORIES_PER_DAY);
+    public Meal create(Meal meal) {
+        int userId = SecurityUtil.authUserId();
+        checkNew(meal);
+        log.info("create {} for user {}", meal, userId);
+        return service.create(meal, userId);
+    }
+
+    public void update(Meal meal, int id) {
+        int userId = SecurityUtil.authUserId();
+        assureIdConsistent(meal, id);
+        log.info("update {} for user {}", meal, userId);
+        service.update(meal, userId);
+    }
+
+    /**
+     * <ol>Filter separately
+     * <li>by date</li>
+     * <li>by time for every date</li>
+     * </ol>
+     */
+    public List<MealTo> getBetween(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+        int userId = SecurityUtil.authUserId();
+        log.info("getBetween dates({} - {}) time({} - {}) for user {}", startDate, endDate, startTime, endTime, userId);
+
+        List<Meal> mealsDateFiltered = service.getBetweenDates(startDate, endDate, userId);
+        return MealsUtil.getFilteredWithExcess(mealsDateFiltered, SecurityUtil.authUserCaloriesPerDay(), startTime, endTime);
     }
 }
