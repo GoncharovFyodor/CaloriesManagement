@@ -18,11 +18,11 @@ public class DateTimeUtil {
     private DateTimeUtil() {
     }
 
-    public static LocalDateTime adjustStartDateTime(LocalDate localDate) {
+    public static LocalDateTime atStartOfDayOrMin(LocalDate localDate) {
         return adjustDateTime(localDate, MIN_DATE, LocalTime.MIN);
     }
 
-    public static LocalDateTime adjustEndDateTime(LocalDate localDate) {
+    public static LocalDateTime atStartOfNextDayOrMax(LocalDate localDate) {
         return adjustDateTime(localDate, MAX_DATE, LocalTime.MAX);
     }
 

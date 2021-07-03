@@ -12,9 +12,8 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-import static ru.javawebinar.topjava.util.DateTimeUtil.adjustEndDateTime;
-import static ru.javawebinar.topjava.util.DateTimeUtil.adjustStartDateTime;
-import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFound;
+import static ru.javawebinar.topjava.util.DateTimeUtil.atStartOfDayOrMin;
+import static ru.javawebinar.topjava.util.DateTimeUtil.atStartOfNextDayOrMax;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -34,12 +33,8 @@ public class MealService {
         checkNotFoundWithId(repository.delete(id, userId), id);
     }
 
-    public List<Meal> getBetweenDates(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
-        return getBetweenDateTimes(adjustStartDateTime(startDate), adjustEndDateTime(endDate), userId);
-    }
-
-    private List<Meal> getBetweenDateTimes(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        return repository.getBetween(startDateTime, endDateTime, userId);
+    public List<Meal> getBetweenInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
+        return repository.getBetweenHalfOpen(atStartOfDayOrMin(startDate), atStartOfNextDayOrMax(endDate), userId);
     }
 
     public List<Meal> getAll(int userId) {
