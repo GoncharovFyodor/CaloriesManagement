@@ -11,6 +11,7 @@ import ru.javawebinar.topjava.repository.UserRepository;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,9 +26,10 @@ public class InMemoryUserRepository implements UserRepository {
 
     static final int USER_ID = 1;
     static final int ADMIN_ID = 2;
+
     public void init() {
-        User user = new User(UserTestData.USER_ID,"user","","", Role.USER);
-        User admin = new User(UserTestData.ADMIN_ID,"admin","","", Role.ADMIN);
+        User user = new User(UserTestData.USER_ID, "user", "", "", Role.USER);
+        User admin = new User(UserTestData.ADMIN_ID, "admin", "", "", Role.ADMIN);
         repository.clear();
         repository.put(UserTestData.USER_ID, user);
         repository.put(UserTestData.ADMIN_ID, admin);
@@ -43,7 +45,7 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public User save(User user) {
         log.info("save {}", user);
-        if (user.isNew()){
+        if (user.isNew()) {
             user.setId(counter.incrementAndGet());
         }
         repository.put(user.getId(), user);
@@ -74,6 +76,7 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
+        Objects.requireNonNull(email, "email must not be null");
         for (User user : repository.values()) {
             if (email.equals(user.getEmail())) return user;
         }
