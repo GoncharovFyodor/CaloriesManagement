@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.repository.inmemory;
 
-import javafx.collections.transformation.SortedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -46,7 +45,7 @@ public class InMemoryMealRepository implements MealRepository {
         MealsUtil.meals.forEach(meal -> save(meal, USER_ID));
         save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510), ADMIN_ID);
         save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500), ADMIN_ID);
-        InMemoryBaseRepository<Meal> userMeals = new InMemoryBaseRepository<>();
+        var userMeals = new InMemoryBaseRepository<Meal>();
         MealTestData.meals.forEach(meal -> userMeals.map.put(meal.getId(), meal));
         usersMealsMap.put(UserTestData.USER_ID, userMeals);
     }
@@ -70,13 +69,13 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        InMemoryBaseRepository<Meal> meals = usersMealsMap.get(userId);
+        var meals = usersMealsMap.get(userId);
         return meals != null && meals.delete(id);
     }
 
     @Override
     public Meal get(int id, int userId) {
-        InMemoryBaseRepository<Meal> meals = usersMealsMap.get(userId);
+        var meals = usersMealsMap.get(userId);
         return meals == null ? null : meals.get(id);
     }
 
@@ -91,7 +90,7 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     private List<Meal> getAllFiltered(int userId, Predicate<Meal> filter) {
-        InMemoryBaseRepository<Meal> meals = usersMealsMap.get(userId);
+        var meals = usersMealsMap.get(userId);
         return meals == null ? Collections.emptyList() :
                 meals.getCollection().stream()
                         .filter(filter)
