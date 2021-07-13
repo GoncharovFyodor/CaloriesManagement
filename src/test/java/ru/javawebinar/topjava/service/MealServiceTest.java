@@ -1,8 +1,11 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.Assert;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.Stopwatch;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
@@ -20,8 +23,10 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertThrows;
+import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.MealTestData.meal1;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
@@ -38,47 +43,32 @@ public class MealServiceTest {
     private long start;
     private double lasted;
     private String resultTest;
+    private static final StringBuilder results = new StringBuilder();
+
     @Rule
-    public TestWatcher watcher=new TestWatcher() {
+    public final Stopwatch stopwatch = new Stopwatch() {
         @Override
-        protected void succeeded(Description description) {
-            resultTest="success";
-        }
-
-        @Override
-        protected void failed(Throwable e, Description description) {
-            resultTest="failed";
-        }
-
-        @Override
-        protected void starting(Description description) {
-            start=System.currentTimeMillis();
-        }
-
-        @Override
-        protected void finished(Description description) {
-            long finish=System.currentTimeMillis();
-            lasted=(finish-start)/1000.0;
-            log.info("Test \"{}\" {} , lasted for {} sec",description.getMethodName(),resultTest,lasted);
-            mapTimeTests.put(description.getMethodName(),lasted);
-            if(mapTimeTests.size()==12) {
-                printTestInfo();
-            }
+        protected void finished(long nanos, Description description) {
+            String result = String.format("\n%-25s %7d", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
+            results.append(result);
+            log.info(result + " ms\n");
         }
     };
-    public void printTestInfo(){
-        System.out.println("----------------------------------");
-        mapTimeTests
-                .forEach((key, value) -> System.out.println(String.format("Test method \"%s\" duration: %f sec", key
-                        , value)));
-        System.out.println("----------------------------------");
-    }
 
     @Rule
     public final ExpectedException thrown = ExpectedException.none();
 
     @Autowired
     private MealService service;
+
+    @AfterClass
+    public static void printResult() {
+        log.info("\n---------------------------------" +
+                "\nTest                 Duration, ms" +
+                "\n---------------------------------" +
+                results +
+                "\n---------------------------------");
+    }
 
     @Test
     public void delete() throws Exception {
@@ -92,7 +82,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void deleteNotFoundCheckRule(){
+    public void deleteNotFoundCheckRule() {
         thrown.expect(NotFoundException.class);
         service.delete(1, USER_ID);
     }
@@ -149,5 +139,13 @@ public class MealServiceTest {
         assertMatch(service.getBetweenInclusive(
                 LocalDate.of(2015, Month.MAY, 30),
                 LocalDate.of(2015, Month.MAY, 30), USER_ID), meal3, meal2, meal1);
+    }
+
+    @Test
+    public void updateNotOwn() {
+        assertThrows(NotFoundException.class, () -> service.update(meal1, ADMIN_ID));
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> service.update(meal1, ADMIN_ID));
+        Assert.assertEquals("Not found entity with id=" + MEAL1_ID, exception.getMessage());
+        MATCHER.assertMatch(service.get(MEAL1_ID, USER_ID), meal1);
     }
 }
