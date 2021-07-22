@@ -43,8 +43,8 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class)
-public class MealServiceTest {
-    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
+public abstract class AbstractMealServiceTest extends AbstractDbTest{
+    private static final Logger log = LoggerFactory.getLogger("result");
     private long start;
     private double lasted;
     private String resultTest;

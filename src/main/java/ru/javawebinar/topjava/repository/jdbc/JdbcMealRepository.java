@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-@Transactional(readOnly = true)
 public class JdbcMealRepository implements MealRepository {
     @PersistenceContext
     private EntityManager em;
@@ -55,7 +54,7 @@ public class JdbcMealRepository implements MealRepository {
         if (meal.isNew()) {
             Number newKey = insertMeal.executeAndReturnKey(map);
             meal.setId(newKey.intValue());
-            em.persist(meal);
+            //em.persist(meal);
         }
         else {
             namedParameterJdbcTemplate.update(
@@ -84,7 +83,7 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        return jdbcTemplate.query("SELECT * FROM meals WHERE date_time BETWEEN ? AND ?",
+        return jdbcTemplate.query("SELECT * FROM meals WHERE date_time BETWEEN ? AND ? ORDER BY id DESC",
                 ROW_MAPPER, startDateTime, endDateTime);
     }
 }
