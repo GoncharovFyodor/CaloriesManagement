@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="initDB.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
+    <script-file value="$PROJECT_DIR$/src/main/resources/db/initDB.sql" />
+    <script-mode>FILE</script-mode>
+    <data-source id="56634854-0056-45f3-abd0-70aded85c585" namespace="database/&quot;topjava&quot;/schema/&quot;public&quot;" />
+    <method v="2" />
+  </configuration>
+</component>

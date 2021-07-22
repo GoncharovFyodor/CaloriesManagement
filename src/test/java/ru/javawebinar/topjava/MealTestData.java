@@ -43,14 +43,17 @@ public class MealTestData {
     }
 
     public static void assertMatch(Meal actual, Meal expected) {
-        assertThat(actual).isEqualToIgnoringGivenFields(expected, "user");
+        //assertThat(actual).isEqualToIgnoringGivenFields(expected, "user");
+        MATCHER.assertMatch(actual,expected);
     }
 
     public static void assertMatch(Iterable<Meal> actual, Meal... expected) {
-        assertMatch(actual, Arrays.asList(expected));
+        //assertMatch(actual, Arrays.asList(expected));
+        MATCHER.assertMatch(actual,expected);
     }
 
     public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
-        assertThat(actual).usingElementComparatorIgnoringFields("user").isEqualTo(expected);
+        //assertThat(actual).usingElementComparatorIgnoringFields("user").isEqualTo(expected);
+        MATCHER.assertMatch(actual,expected);
     }
 }

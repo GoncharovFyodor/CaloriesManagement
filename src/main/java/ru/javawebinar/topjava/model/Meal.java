@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.model;
 
-import org.hibernate.annotations.Entity;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.validator.constraints.Range;
@@ -39,10 +38,12 @@ public class Meal extends AbstractBaseEntity {
     @Range(min = 50, max = 10000)
     private int calories;
 
-    private int userId;
+    /*@Column(name = "user_id")
+    private int userId;*/
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @CollectionTable(name = "users", joinColumns = @JoinColumn(name = "id"))
+    @JoinColumn(name = "user_id", nullable = false)
+    @NotNull
     private User user;
 
     public Meal() {
@@ -57,7 +58,7 @@ public class Meal extends AbstractBaseEntity {
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
-        this.userId = userId;
+        //this.userId = userId;
     }
 
     public LocalDateTime getDateTime() {
@@ -92,13 +93,13 @@ public class Meal extends AbstractBaseEntity {
         this.calories = calories;
     }
 
-    public int getUserId() {
+    /*public int getUserId() {
         return userId;
     }
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
+    }*/
 
     public User getUser() {
         return user;
