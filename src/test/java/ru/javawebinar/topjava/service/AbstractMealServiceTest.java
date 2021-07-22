@@ -153,7 +153,7 @@ public abstract class AbstractMealServiceTest extends AbstractDbTest{
 
     @Test
     public void updateNotOwn() {
-        assertThrows(NotFoundException.class, () -> service.update(meal1, ADMIN_ID));
+        //assertThrows(NotFoundException.class, () -> service.update(meal1, ADMIN_ID));
         NotFoundException exception = assertThrows(NotFoundException.class, () -> service.update(getUpdated(), ADMIN_ID));
         Assert.assertEquals("Not found entity with id=" + MEAL1_ID, exception.getMessage());
         MATCHER.assertMatch(service.get(MEAL1_ID, USER_ID), meal1);
