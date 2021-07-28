@@ -68,7 +68,7 @@ public abstract class AbstractMealServiceTest extends AbstractDbTest{
     public final ExpectedException thrown = ExpectedException.none();
 
     @Autowired
-    private MealService service;
+    protected MealService service;
 
     @AfterClass
     public static void printResult() {
