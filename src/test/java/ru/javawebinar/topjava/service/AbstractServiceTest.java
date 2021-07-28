@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
@@ -13,6 +14,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.ActiveDbProfileResolver;
 import ru.javawebinar.topjava.TimingRules;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.assertThrows;
+import static ru.javawebinar.topjava.util.ValidationUtil.getRootCause;
+
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
@@ -20,10 +25,30 @@ import ru.javawebinar.topjava.TimingRules;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class)
-public abstract class AbstractServiceTest {
+public abstract class AbstractServiceTest extends AbstractDbTest{
+
     @ClassRule
     public static ExternalResource summary = TimingRules.SUMMARY;
 
     @Rule
     public Stopwatch stopwatch = TimingRules.STOPWATCH;
+
+    //  Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778
+    protected <T extends Throwable> void validateRootCause(Class<T> rootExceptionClass, Runnable runnable) {
+        assertThrows(rootExceptionClass, () -> {
+            try {
+                runnable.run();
+            } catch (Exception e) {
+                throw getRootCause(e);
+            }
+        });
+    }
+    public <T extends Throwable> void validateRootCause(Runnable runnable, Class<T> exceptionClass) {
+        try {
+            runnable.run();
+            Assert.fail("Expected " + exceptionClass.getName());
+        } catch (Exception e) {
+            Assert.assertThat(getRootCause(e), instanceOf(exceptionClass));
+        }
+    }
 }
