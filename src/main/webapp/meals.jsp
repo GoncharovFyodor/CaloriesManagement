@@ -9,7 +9,7 @@
 </head>
 <body>
 <section>
-    <h3><a href="index.html">Home</a></h3>
+    <h3><a href="index.jsp">Home</a></h3>
     <h2>Meal list</h2>
     <form method="get" action="meals">
         <input type="hidden" name="action" value="filter">
