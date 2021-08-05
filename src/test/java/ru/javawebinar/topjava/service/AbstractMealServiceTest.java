@@ -33,7 +33,7 @@ import static java.time.LocalDateTime.of;
 import static org.junit.Assert.assertThrows;
 import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.MealTestData.*;
-import static ru.javawebinar.topjava.MealTestData.meal1;
+import static ru.javawebinar.topjava.MealTestData.MEAL1;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
@@ -83,7 +83,7 @@ public abstract class AbstractMealServiceTest extends AbstractServiceTest{
     @Test
     public void delete() throws Exception {
         service.delete(MEAL1_ID, USER_ID);
-        assertMatch(service.getAll(USER_ID), meal7, meal6, meal5, meal4, meal3, meal2);
+        assertMatch(service.getAll(USER_ID), MEAL7, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2);
     }
 
     @Test(expected = NotFoundException.class)
@@ -108,14 +108,14 @@ public abstract class AbstractMealServiceTest extends AbstractServiceTest{
         Meal created = service.create(newMeal, USER_ID);
         newMeal.setId(created.getId());
         //assertMatch(newMeal, created);
-        assertMatch(service.getAll(USER_ID), newMeal, meal7, meal6, meal5, meal4, meal3, meal2, meal1);
+        assertMatch(service.getAll(USER_ID), newMeal, MEAL7, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
     }
 
     @Test
     public void get() throws Exception {
         Meal actual = service.get(ADMIN_MEAL_ID, ADMIN_ID);
         actual.setUser(null);
-        MATCHER.assertMatch(actual, adminMeal1);
+        MATCHER.assertMatch(actual, ADMIN_MEAL1);
     }
 
     @Test(expected = NotFoundException.class)
@@ -137,19 +137,19 @@ public abstract class AbstractMealServiceTest extends AbstractServiceTest{
 
     @Test(expected = NotFoundException.class)
     public void updateNotFound() throws Exception {
-        service.update(meal1, ADMIN_ID);
+        service.update(MEAL1, ADMIN_ID);
     }
 
     @Test
     public void getAll() throws Exception {
-        assertMatch(service.getAll(USER_ID), meals);
+        assertMatch(service.getAll(USER_ID), MEALS);
     }
 
     @Test
     public void getBetween() throws Exception {
         assertMatch(service.getBetweenInclusive(
                 LocalDate.of(2020, Month.JANUARY, 30),
-                LocalDate.of(2020, Month.JANUARY, 30), USER_ID), meal4, meal3, meal2, meal1);
+                LocalDate.of(2020, Month.JANUARY, 30), USER_ID), MEAL4, MEAL3, MEAL2, MEAL1);
     }
 
     @Test
@@ -157,14 +157,14 @@ public abstract class AbstractMealServiceTest extends AbstractServiceTest{
         //assertThrows(NotFoundException.class, () -> service.update(meal1, ADMIN_ID));
         NotFoundException exception = assertThrows(NotFoundException.class, () -> service.update(getUpdated(), ADMIN_ID));
         Assert.assertEquals("Not found entity with id=" + MEAL1_ID, exception.getMessage());
-        MATCHER.assertMatch(service.get(MEAL1_ID, USER_ID), meal1);
+        MATCHER.assertMatch(service.get(MEAL1_ID, USER_ID), MEAL1);
     }
 
     @Test
-    public void createWithException() throws Exception {
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "  ", 300), USER_ID));
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new Meal(null, null, "Description", 300), USER_ID));
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Description", 9), USER_ID));
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Description", 5001), USER_ID));
+    public void testValidation() throws Exception {
+        validateRootCause(() -> service.create(new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "  ", 300), USER_ID), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Meal(null, null, "Description", 300), USER_ID), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Description", 9), USER_ID), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Description", 5001), USER_ID), ConstraintViolationException.class);
     }
 }

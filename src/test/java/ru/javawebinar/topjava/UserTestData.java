@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava;
 
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 
@@ -15,15 +16,15 @@ public class UserTestData {
     public static final int ADMIN_ID = START_SEQ + 1;
     public static final int NOT_FOUND = 10;
 
-    public static final User user = new User(USER_ID, "User", "user@yandex.ru", "password", Role.USER);
-    public static final User admin = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin", Role.ADMIN);
+    public static final User USER = new User(USER_ID, "User", "user@yandex.ru", "password", Role.USER);
+    public static final User ADMIN = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin", Role.ADMIN);
 
     public static User getNew() {
         return new User(null, "New", "new@gmail.com", "newPass", 1555, false, new Date(), Collections.singleton(Role.USER));
     }
 
     public static User getUpdated() {
-        User updated = new User(user);
+        User updated = new User(USER);
         updated.setEmail("update@gmail.com");
         updated.setName("UpdatedName");
         updated.setCaloriesPerDay(330);
@@ -31,5 +32,20 @@ public class UserTestData {
         updated.setEnabled(false);
         updated.setRoles(Collections.singletonList(Role.ADMIN));
         return updated;
+    }
+
+    public static void assertMatch(User actual, User expected) {
+        //assertThat(actual).isEqualToIgnoringGivenFields(expected, "user");
+        MATCHER.assertMatch(actual,expected);
+    }
+
+    public static void assertMatch(Iterable<User> actual, User... expected) {
+        //assertMatch(actual, Arrays.asList(expected));
+        MATCHER.assertMatch(actual,expected);
+    }
+
+    public static void assertMatch(Iterable<User> actual, Iterable<User> expected) {
+        //assertThat(actual).usingElementComparatorIgnoringFields("user").isEqualTo(expected);
+        MATCHER.assertMatch(actual,expected);
     }
 }
