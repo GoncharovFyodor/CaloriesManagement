@@ -41,6 +41,7 @@ public class InMemoryAdminRestControllerTest {
         repository.init();
     }
 
+    @Test
     public void delete() {
         controller.delete(USER_ID);
         Collection<User> users = controller.getAll();
