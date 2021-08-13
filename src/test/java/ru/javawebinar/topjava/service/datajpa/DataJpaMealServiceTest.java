@@ -18,8 +18,8 @@ class DataJpaMealServiceTest extends AbstractMealServiceTest {
     @Test
     void getWithUser() {
         Meal adminMeal = service.getWithUser(ADMIN_MEAL_ID, ADMIN_ID);
-        MATCHER.assertMatch(adminMeal, ADMIN_MEAL1);
-        UserTestData.MATCHER.assertMatch(adminMeal.getUser(), ADMIN);
+        MATCHER.assertMatch(adminMeal, adminMeal1);
+        UserTestData.MATCHER.assertMatch(adminMeal.getUser(), admin);
     }
 
     @Test

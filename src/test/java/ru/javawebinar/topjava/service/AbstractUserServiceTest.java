@@ -1,7 +1,11 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.support.NoOpCacheManager;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -34,6 +38,14 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Autowired
     protected UserService service;
+
+    @Autowired
+    private NoOpCacheManager noOpCacheManager;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        noOpCacheManager.getCache("users").clear();
+    }
 
     @Test
     void create() {
