@@ -51,7 +51,7 @@ public class MealsUtil {
                 .collect(toList());
     }
 
-    private static MealTo createTo(Meal meal, boolean excess) {
+    public static MealTo createTo(Meal meal, boolean excess) {
         return new MealTo(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
     }
 }

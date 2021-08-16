@@ -15,8 +15,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
-    public static final MatcherFactory<Meal> MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Meal.class, "user");
-    public static final MatcherFactory<MealTo> MATCHER_TO = MatcherFactory.usingIgnoringFieldsComparator(MealTo.class, "user");
+    public static final MatcherFactory.Matcher<Meal> MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Meal.class, "user");
+    public static MatcherFactory.Matcher<MealTo> TO_MATCHER = MatcherFactory.usingEqualsComparator(MealTo.class);
+    public static final MatcherFactory.Matcher<MealTo> MATCHER_TO = MatcherFactory.usingIgnoringFieldsComparator(MealTo.class, "user");
 
     public static final int NOT_FOUND = 10;
     public static final int MEAL1_ID = START_SEQ + 2;
