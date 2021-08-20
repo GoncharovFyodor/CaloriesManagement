@@ -23,9 +23,26 @@ $(function () {
             "order": [
                 [
                     0,
-                    "asc"
+                    "desc"
                 ]
             ]
         })
     });
 });
+function filter() {
+    var form=$('#dateForm');
+    var startDate=(form.find('#startDate').val());
+    var startTime=(form.find('#startTime').val());
+    var endDate=(form.find('#endDate').val());
+    var endTime=(form.find('#endTime').val());
+    $.ajax({
+        type:"GET",
+        url:"ajax/meals/filter",
+        data:form.serialize()
+    });
+}
+
+function resetForm() {
+    $('#dateForm').find(':input').val("");
+    filter();
+}
