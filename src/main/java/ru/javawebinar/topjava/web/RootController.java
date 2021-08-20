@@ -21,6 +21,8 @@ public class RootController {
 
     @GetMapping("/")
     public String root() {
+        int userId = SecurityUtil.authUserId();
+        userService.enableUser(userId,false);
         return "index";
     }
 
@@ -33,6 +35,7 @@ public class RootController {
     @PostMapping("/users")
     public String setUser(HttpServletRequest request) {
         int userId = Integer.parseInt(request.getParameter("userId"));
+        userService.enableUser(userId,true);
         SecurityUtil.setAuthUserId(userId);
         return "redirect:meals";
     }

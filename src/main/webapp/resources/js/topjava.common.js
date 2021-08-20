@@ -5,7 +5,7 @@ function makeEditable(datatableApi) {
     form = $('#detailsForm');
     $(".delete").click(function () {
         if (confirm('Are you sure?')) {
-            deleteRow($(this).closest('tr').attr("id"));
+            deleteRow($(".tr").closest('tr').attr("id"));
         }
     });
 

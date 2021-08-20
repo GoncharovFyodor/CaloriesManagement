@@ -30,19 +30,30 @@ $(function () {
     });
 });
 function filter() {
-    var form=$('#dateForm');
-    var startDate=(form.find('#startDate').val());
-    var startTime=(form.find('#startTime').val());
-    var endDate=(form.find('#endDate').val());
-    var endTime=(form.find('#endTime').val());
-    $.ajax({
-        type:"GET",
-        url:"ajax/meals/filter",
-        data:form.serialize()
-    });
+    $.get(context.ajaxUrl + "filter", $('#dateForm').serialize())
+        .done(function (data) {
+            context.datatableApi.clear().rows.add(data).draw()
+        });
 }
 
 function resetForm() {
     $('#dateForm').find(':input').val("");
-    filter();
+    updateTable();
+}
+function saveMeal() {
+    var formM=$("#dateForm");
+    $.ajax({
+        type: "POST",
+        url: context.ajaxUrl,
+        data: form.serialize()
+    }).done(function () {
+        $("#editRow").modal("hide");
+        if (formM.find('#startDate').val()||formM.find('#startTime').val()||formM.find('#endDate').val()||formM.find('#endTime').val()){
+            filter();
+        }
+        else {
+            updateTable();
+        }
+        successNoty("Saved");
+    });
 }
