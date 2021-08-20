@@ -5,6 +5,8 @@
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
+<script type="text/javascript" src="resources/js/topjava.common.js" defer></script>
+<script type="text/javascript" src="resources/js/topjava.meals.js" defer></script>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 
 <section>
@@ -34,9 +36,12 @@
         <button type="submit"><spring:message code="meal.filter"/></button>
     </form>
     <hr>
-    <a href="meals/create"><spring:message code="meal.add"/></a>
+    <button class="btn btn-primary" onclick="add()">
+        <span class="fa fa-plus"></span>
+        <spring:message code="common.add"/>
+    </button>
     <hr>
-    <table border="1" cellpadding="8" cellspacing="0">
+    <table class="table table-striped" id="datatable">
         <thead>
         <tr>
             <th><spring:message code="meal.dateTime"/></th>
@@ -56,8 +61,8 @@
                 </td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
-                <td><a href="meals/update?id=${meal.id}"><spring:message code="common.update"/></a></td>
-                <td><a href="meals/delete?id=${meal.id}"><spring:message code="common.delete"/></a></td>
+                <td><a><span class="fa fa-pencil"></span></a></td>
+                <td><a class="delete" id="${meal.id}"><span class="fa fa-remove"></span></a></td>
             </tr>
         </c:forEach>
     </table>
