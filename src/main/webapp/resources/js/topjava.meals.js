@@ -1,12 +1,28 @@
+const mealAjaxUrl = "profile/meals/";
+
+// https://stackoverflow.com/a/5064235/548473
+const ctx = {
+    ajaxUrl: mealAjaxUrl,
+    updateTable: function () {
+        $.ajax({
+            type: "GET",
+            url: mealAjaxUrl + "filter",
+            data: $("#filter").serialize()
+        }).done(updateTableByData);
+    }
+}
+
 $(function () {
-    makeEditable({
-        ajaxUrl: "ajax/meals/",
-        datatableApi: $("#datatable").DataTable({
+    makeEditable(
+        $("#datatable").DataTable({
             "paging": false,
             "info": true,
             "columns": [
                 {
                     "data": "dateTime"
+                },
+                {
+                    "data": "description"
                 },
                 {
                     "data": "calories"
@@ -27,33 +43,5 @@ $(function () {
                 ]
             ]
         })
-    });
+    );
 });
-function filter() {
-    $.get(context.ajaxUrl + "filter", $('#dateForm').serialize())
-        .done(function (data) {
-            context.datatableApi.clear().rows.add(data).draw()
-        });
-}
-
-function resetForm() {
-    $('#dateForm').find(':input').val("");
-    updateTable();
-}
-function saveMeal() {
-    var formM=$("#dateForm");
-    $.ajax({
-        type: "POST",
-        url: context.ajaxUrl,
-        data: form.serialize()
-    }).done(function () {
-        $("#editRow").modal("hide");
-        if (formM.find('#startDate').val()||formM.find('#startTime').val()||formM.find('#endDate').val()||formM.find('#endTime').val()){
-            filter();
-        }
-        else {
-            updateTable();
-        }
-        successNoty("Saved");
-    });
-}
