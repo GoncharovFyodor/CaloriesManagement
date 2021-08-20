@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Repository
-public class InMemoryUserRepository implements UserRepository {
+public class InMemoryUserRepository extends InMemoryBaseRepository<User> implements UserRepository {
     private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepository.class);
 
     private Map<Integer, User> repository = new ConcurrentHashMap<>();
@@ -60,17 +60,9 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public List<User> getAll() {
-        log.info("getAll");
-        List<User> users = (List<User>) repository.values();
-        Collections.sort(users, new Comparator<User>() {
-            @Override
-            public int compare(User o1, User o2) {
-                int compare = o1.getName().compareTo(o2.getName());
-                if (compare == 0) return o1.getEmail().compareTo(o2.getEmail());
-                return compare;
-            }
-        });
-        return users;
+        return getCollection().stream()
+                .sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))
+                .toList();
     }
 
     @Override
