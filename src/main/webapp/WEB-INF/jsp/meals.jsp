@@ -33,7 +33,10 @@
             </div>
         </form>
         <button type="button" class="btn btn-primary" onclick="filter()"><spring:message code="meal.filter"/></button>
-        <button class="btn btn-danger" onclick="resetForm()"><spring:message code="meal.reset"/></button>
+        <button class="btn btn-danger" onclick="clearFilter()">
+            <span class="fa fa-remove"></span>
+            <spring:message code="common.cancel"/>
+        </button>
         <hr>
         <button class="btn btn-primary" onclick="add()">
             <span class="fa fa-plus"></span>
