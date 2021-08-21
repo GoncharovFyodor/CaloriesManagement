@@ -42,14 +42,11 @@ public class Meal extends AbstractBaseEntity {
     @Range(min = 50, max = 10000)
     private int calories;
 
-    /*@Column(name = "user_id")
-    private int userId;*/
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
-//    @NotNull
+    @NotNull
     private User user;
 
     public Meal() {
