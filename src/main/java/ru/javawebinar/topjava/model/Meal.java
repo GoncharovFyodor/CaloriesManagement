@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @SuppressWarnings("JpaQlInspection")
 @NamedQueries({
@@ -32,6 +33,7 @@ public class Meal extends AbstractBaseEntity {
 
     @Column(name = "date_time", columnDefinition = "timestamp default now()")
     @NotNull
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
@@ -39,8 +41,9 @@ public class Meal extends AbstractBaseEntity {
     private String description;
 
     @Column(name = "calories", columnDefinition = "int default 500")
+    @NotNull
     @Range(min = 50, max = 10000)
-    private int calories;
+    private Integer calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -88,7 +91,7 @@ public class Meal extends AbstractBaseEntity {
         this.description = description;
     }
 
-    public void setCalories(int calories) {
+    public void setCalories(Integer calories) {
         this.calories = calories;
     }
 
