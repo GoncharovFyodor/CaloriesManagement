@@ -3,6 +3,7 @@ package ru.javawebinar.topjava;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import java.util.Collections;
 import java.util.Date;
@@ -63,5 +64,9 @@ public class UserTestData {
     public static void assertMatch(Iterable<User> actual, Iterable<User> expected) {
         //assertThat(actual).usingElementComparatorIgnoringFields("user").isEqualTo(expected);
         MATCHER.assertMatch(actual,expected);
+    }
+
+    public static String jsonWithPassword(User user, String passw) {
+        return JsonUtil.writeAdditionProps(user, "password", passw);
     }
 }
