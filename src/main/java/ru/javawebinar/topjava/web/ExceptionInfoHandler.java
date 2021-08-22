@@ -19,6 +19,7 @@ import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ValidationException;
 
 import static ru.javawebinar.topjava.util.exception.ErrorType.*;
 
@@ -29,7 +30,7 @@ public class ExceptionInfoHandler {
 
     //  http://stackoverflow.com/a/22358422/548473
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler({IllegalRequestDataException.class, ValidationException.class, MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class})
     public ErrorInfo handleError(HttpServletRequest req, NotFoundException e) {
         return logAndGetErrorInfo(req, e, false, DATA_NOT_FOUND);
     }
