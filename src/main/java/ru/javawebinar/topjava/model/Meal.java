@@ -57,7 +57,7 @@ public class Meal extends AbstractBaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
-    @NotNull
+    @NotNull(groups = View.Persist.class)
     private User user;
 
     public Meal() {
