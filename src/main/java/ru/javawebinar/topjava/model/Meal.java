@@ -14,11 +14,13 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.validation.groups.Default;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.javawebinar.topjava.View;
+import ru.javawebinar.topjava.View.ValidatedUI;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 
 @SuppressWarnings("JpaQlInspection")
@@ -37,17 +39,18 @@ public class Meal extends AbstractBaseEntity {
     public static final String GET_BETWEEN = "Meal.getBetween";
 
     @Column(name = "date_time", columnDefinition = "timestamp default now()")
-    @NotNull
+    @NotNull(groups = {ValidatedUI.class, Default.class})
     @JsonView(View.JsonREST.class)
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
-    @NotBlank
+    @NotBlank(groups = {ValidatedUI.class, Default.class})
+    @Size(min = 2, max = 120, groups = {ValidatedUI.class, Default.class})
     private String description;
 
     @Column(name = "calories", columnDefinition = "int default 500")
-    @NotNull
-    @Range(min = 50, max = 10000)
+    @NotNull(groups = {ValidatedUI.class, Default.class})
+    @Range(min = 10, max = 5000, groups = {ValidatedUI.class, Default.class})
     private Integer calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
