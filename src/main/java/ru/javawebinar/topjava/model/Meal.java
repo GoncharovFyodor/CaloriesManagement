@@ -22,6 +22,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ru.javawebinar.topjava.View;
 import ru.javawebinar.topjava.View.ValidatedUI;
 import ru.javawebinar.topjava.util.DateTimeUtil;
+import ru.javawebinar.topjava.util.validation.NoHtml;
 
 @SuppressWarnings("JpaQlInspection")
 @NamedQueries({
@@ -46,6 +47,7 @@ public class Meal extends AbstractBaseEntity {
     @Column(name = "description", nullable = false)
     @NotBlank(groups = {ValidatedUI.class, Default.class})
     @Size(min = 2, max = 120, groups = {ValidatedUI.class, Default.class})
+    @NoHtml(groups = {View.Web.class})
     private String description;
 
     @Column(name = "calories", columnDefinition = "int default 500")
