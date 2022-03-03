@@ -28,8 +28,8 @@ public class InMemoryUserRepository extends InMemoryBaseRepository<User> impleme
     static final int ADMIN_ID = 2;
 
     public void init() {
-        User user = new User(UserTestData.USER_ID, "user", "", "", Role.USER);
-        User admin = new User(UserTestData.ADMIN_ID, "admin", "", "", Role.ADMIN);
+        User user = new User(UserTestData.USER_ID, "user", "", "", 1500, Role.USER);
+        User admin = new User(UserTestData.ADMIN_ID, "admin", "", "", 1600, Role.ADMIN);
         repository.clear();
         repository.put(UserTestData.USER_ID, user);
         repository.put(UserTestData.ADMIN_ID, admin);
