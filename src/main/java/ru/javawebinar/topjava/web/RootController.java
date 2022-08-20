@@ -28,8 +28,8 @@ public class RootController {
         return "login";
     }
 
-    @GetMapping("/meals")
+    /*@GetMapping("/meals")
     public String getMeals() {
         return "meals";
-    }
+    }*/
 }

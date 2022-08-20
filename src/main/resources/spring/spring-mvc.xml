@@ -93,10 +93,4 @@
         </bean>
 
     </mvc:interceptors>
-
-    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
-        <property name="defaultLocale" value="en" />
-        <!-- cookieMaxAge in seconds. if you set it to -1, the cookie will be deleted when browser is closed) -->
-        <property name="cookieMaxAge" value="100000"/>
-    </bean>
 </beans>

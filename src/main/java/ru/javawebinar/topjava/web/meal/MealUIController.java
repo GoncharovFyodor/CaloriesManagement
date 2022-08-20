@@ -22,7 +22,7 @@ import java.util.List;
 public class MealUIController extends AbstractMealController {
 
     @Override
-    @GetMapping("/{id}")
+    @GetMapping("/")
     @JsonView(View.JsonUI.class)
     public List<MealTo> getAll() {
         return super.getAll();
